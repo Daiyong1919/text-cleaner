@@ -299,6 +299,9 @@
 
     <!-- ====== 功能选项 ====== -->
     <div class="options-grid" id="optionsContainer">
+        <!-- ========================================= -->
+        <!-- 区域一：核心清理（高频必用）              -->
+        <!-- ========================================= -->
         <label class="option-item">
             <input type="checkbox" id="optTrim" checked />
             <span data-i18n="optTrim">Trim leading/trailing spaces</span>
@@ -308,10 +311,6 @@
             <span data-i18n="optMultipleSpaces">Collapse multiple spaces</span>
         </label>
         <label class="option-item">
-            <input type="checkbox" id="optRemoveAllSpaces" />
-            <span data-i18n="optRemoveAllSpaces">Remove all spaces (Chinese/English)</span>
-        </label>
-        <label class="option-item">
             <input type="checkbox" id="optRemoveEmptyLines" checked />
             <span data-i18n="optRemoveEmptyLines">Delete empty lines</span>
         </label>
@@ -319,8 +318,15 @@
             <input type="checkbox" id="optUnifyLineBreaks" checked />
             <span data-i18n="optUnifyLineBreaks">Unify line breaks (LF)</span>
         </label>
+        <label class="option-item">
+            <input type="checkbox" id="optRemoveAllSpaces" />
+            <span data-i18n="optRemoveAllSpaces">Remove all spaces (Chinese/English)</span>
+        </label>
 
-        <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px;">
+        <!-- ========================================= -->
+        <!-- 区域二：高级清理（按需使用）              -->
+        <!-- ========================================= -->
+        <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
             <label class="option-item">
                 <input type="checkbox" id="optRemoveSpecial" />
                 <span data-i18n="optRemoveSpecial">Remove special symbols (keep letters/numbers/Chinese)</span>
@@ -337,18 +343,37 @@
             <span data-i18n="optKeepTranscriptFormat">🔊 Keep audio transcript format (speaker + timestamp)</span>
         </label>
 
-        <label class="option-item">
-            <input type="checkbox" id="optUpperCase" />
-            <span data-i18n="optUpperCase">UPPER CASE</span>
-        </label>
-        <label class="option-item">
-            <input type="checkbox" id="optLowerCase" />
-            <span data-i18n="optLowerCase">lower case</span>
-        </label>
-        <label class="option-item">
-            <input type="checkbox" id="optCapitalize" />
-            <span data-i18n="optCapitalize">Capitalize sentences</span>
-        </label>
+        <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; margin-top:4px;">
+            <span style="font-size:13px; color:var(--muted);">大小写：</span>
+            <label class="option-item">
+                <input type="checkbox" id="optUpperCase" />
+                <span data-i18n="optUpperCase">UPPER CASE</span>
+            </label>
+            <label class="option-item">
+                <input type="checkbox" id="optLowerCase" />
+                <span data-i18n="optLowerCase">lower case</span>
+            </label>
+            <label class="option-item">
+                <input type="checkbox" id="optCapitalize" />
+                <span data-i18n="optCapitalize">Capitalize sentences</span>
+            </label>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- 区域三：中文排版（特定场景）              -->
+        <!-- ========================================= -->
+        <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
+            <span style="font-weight:500; font-size:14px; color:var(--muted);">🇨🇳 中文排版</span>
+            <label class="option-item">
+                <input type="checkbox" id="optIndent" />
+                <span data-i18n="optIndent">段首缩进两格</span>
+            </label>
+            <div style="display:flex; align-items:center; gap:4px; font-size:14px;">
+                <span data-i18n="optLineHeight">行距：</span>
+                <input type="number" id="lineHeightInput" value="28" min="12" max="60" step="1" style="width:70px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:4px 8px; font-size:14px; outline:none;" />
+                <span style="color:var(--muted);">磅</span>
+            </div>
+        </div>
     </div>
 
     <div class="hint-spaces" data-i18n="hintSpaces">💡 "Collapse" keeps single spaces; "Remove all" deletes every space.</div>
@@ -436,6 +461,8 @@
                 optLowerCase: 'lower case',
                 optCapitalize: 'Capitalize sentences',
                 optKeepTranscriptFormat: '🔊 Keep audio transcript format (speaker + timestamp)',
+                optIndent: 'Indent first line (2 spaces)',
+                optLineHeight: 'Line height:',
                 statsChars: 'Characters',
                 statsWords: 'Words',
                 statsLines: 'Lines',
@@ -467,6 +494,8 @@
                 optLowerCase: '转小写',
                 optCapitalize: '首字母大写（每句）',
                 optKeepTranscriptFormat: '🔊 保留音频转文字稿格式（讲话人 + 时间码）',
+                optIndent: '段首缩进两格',
+                optLineHeight: '行距：',
                 statsChars: '字符数',
                 statsWords: '单词数',
                 statsLines: '行数',
@@ -534,6 +563,8 @@
         const optLowerCase = document.getElementById('optLowerCase');
         const optCapitalize = document.getElementById('optCapitalize');
         const optKeepTranscriptFormat = document.getElementById('optKeepTranscriptFormat');
+        const optIndent = document.getElementById('optIndent');
+        const lineHeightInput = document.getElementById('lineHeightInput');
         const keepCharsInput = document.getElementById('keepCharsInput');
 
         const copyBtn = document.getElementById('copyBtn');
@@ -597,12 +628,51 @@
                 }
             }
 
-            // 5. 删除空行
+            // 5. 删除空行（先不做，等段首缩进和行距处理完再统一处理）
+            // 将删除空行移到缩进和行距之后
+
+            // 6. 段首缩进两格
+            if (optIndent.checked) {
+                const lines = result.split('\n');
+                const indentedLines = lines.map(line => {
+                    if (line.trim() === '') return line;
+                    return '　　' + line;
+                });
+                result = indentedLines.join('\n');
+            }
+
+            // 7. 行距处理
+            let lineHeightValue = parseFloat(lineHeightInput.value);
+            if (isNaN(lineHeightValue) || lineHeightValue < 12) {
+                lineHeightValue = 28;
+                lineHeightInput.value = 28;
+            }
+            // 将磅值映射为段间空行数：每增加12磅约等于一个空行
+            const extraLineBreaks = Math.round((lineHeightValue - 12) / 12);
+            const numBreaks = Math.min(Math.max(extraLineBreaks, 0), 4);
+
+            // 先按换行分割，过滤掉空行
+            let lines = result.split('\n');
+            let nonEmptyLines = lines.filter(line => line.trim() !== '');
+
+            if (numBreaks > 0) {
+                // 在每段后添加指定数量的空行
+                let separatedText = nonEmptyLines.map(line => {
+                    return line + '\n'.repeat(numBreaks);
+                }).join('');
+                // 去除末尾多余换行
+                result = separatedText.replace(/\n+$/, '');
+            } else {
+                // 单倍行距：直接用单个换行符连接
+                result = nonEmptyLines.join('\n');
+            }
+
+            // 8. 删除空行（如果用户勾选，在最终结果上再执行一次）
             if (optRemoveEmptyLines.checked) {
                 result = result.split('\n').filter(line => line.trim() !== '').join('\n');
             }
 
-            // 6. 大小写转换
+            // 9. 大小写转换
             if (optUpperCase.checked) {
                 result = result.toUpperCase();
             } else if (optLowerCase.checked) {
@@ -647,6 +717,7 @@
         // ---------- 事件绑定 ----------
         inputEl.addEventListener('input', scheduleUpdate);
         keepCharsInput.addEventListener('input', scheduleUpdate);
+        lineHeightInput.addEventListener('input', scheduleUpdate);
 
         const allCheckboxes = document.querySelectorAll('.option-item input[type="checkbox"]');
         allCheckboxes.forEach(cb => {
@@ -722,6 +793,8 @@
             optLowerCase.checked = false;
             optCapitalize.checked = false;
             optKeepTranscriptFormat.checked = false;
+            optIndent.checked = false;
+            lineHeightInput.value = '28';
             keepCharsInput.value = '';
             updateDisplay();
         });
@@ -730,41 +803,4 @@
         let darkMode = false;
         themeToggle.addEventListener('click', () => {
             darkMode = !darkMode;
-            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-            const dict = i18n[currentLang];
-            themeToggle.textContent = darkMode ? dict.themeLight : dict.themeDark;
-        });
-
-        // ---------- 多语言切换 ----------
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            updateLanguage(currentLang);
-            const dict = i18n[currentLang];
-            themeToggle.textContent = darkMode ? dict.themeLight : dict.themeDark;
-            copyBtn.textContent = dict.copyBtn;
-        });
-
-        // ---------- 广告初始化 ----------
-        function initAds() {
-            try {
-                if (typeof adsbygoogle !== 'undefined') {
-                    document.querySelectorAll('.ad-placeholder-text').forEach(el => {
-                        el.style.display = 'none';
-                    });
-                }
-            } catch (e) {}
-        }
-
-        // ---------- 初始化 ----------
-        updateLanguage('en');
-        themeToggle.textContent = '🌙 Dark';
-        updateDisplay();
-        window.addEventListener('load', function() {
-            updateDisplay();
-            setTimeout(initAds, 2000);
-        });
-    })();
-</script>
-
-</body>
-</html>
+            document.documentElement.setAttribute('data-the
