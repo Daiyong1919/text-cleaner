@@ -268,6 +268,10 @@
                 display: flex;
             }
         }
+        /* ====== 广告位默认隐藏（等 AdSense 审核通过后再显示） ====== */
+.ad-container {
+    display: none !important;
+}
     </style>
 </head>
 <body>
@@ -344,7 +348,7 @@
         </label>
 
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; margin-top:4px;">
-            <span style="font-size:13px; color:var(--muted);">大小写：</span>
+            <span style="font-size:13px; color:var(--muted);" data-i18n="caseLabel">大小写：</span>
             <label class="option-item">
                 <input type="checkbox" id="optUpperCase" />
                 <span data-i18n="optUpperCase">UPPER CASE</span>
@@ -363,7 +367,7 @@
         <!-- 区域三：中文排版（特定场景）              -->
         <!-- ========================================= -->
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
-            <span style="font-weight:500; font-size:14px; color:var(--muted);">🇨🇳 中文排版</span>
+            <span style="font-weight:500; font-size:14px; color:var(--muted);" data-i18n="cnLabel">🇨🇳 中文排版</span>
             <label class="option-item">
                 <input type="checkbox" id="optIndent" />
                 <span data-i18n="optIndent">段首缩进两格</span>
@@ -371,7 +375,7 @@
             <div style="display:flex; align-items:center; gap:4px; font-size:14px;">
                 <span data-i18n="optLineHeight">行距：</span>
                 <input type="number" id="lineHeightInput" value="28" min="12" max="60" step="1" style="width:70px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:4px 8px; font-size:14px; outline:none;" />
-                <span style="color:var(--muted);">磅</span>
+                <span style="color:var(--muted);" data-i18n="unitLabel">磅</span>
             </div>
         </div>
     </div>
@@ -463,6 +467,9 @@
                 optKeepTranscriptFormat: '🔊 Keep audio transcript format (speaker + timestamp)',
                 optIndent: 'Indent first line (2 spaces)',
                 optLineHeight: 'Line height:',
+                unitLabel: 'pt',
+                cnLabel: '🇨🇳 Chinese Layout',
+                caseLabel: 'Case:',
                 statsChars: 'Characters',
                 statsWords: 'Words',
                 statsLines: 'Lines',
@@ -496,6 +503,9 @@
                 optKeepTranscriptFormat: '🔊 保留音频转文字稿格式（讲话人 + 时间码）',
                 optIndent: '段首缩进两格',
                 optLineHeight: '行距：',
+                unitLabel: '磅',
+                cnLabel: '🇨🇳 中文排版',
+                caseLabel: '大小写：',
                 statsChars: '字符数',
                 statsWords: '单词数',
                 statsLines: '行数',
@@ -519,12 +529,16 @@
 
         let currentLang = 'en';
 
+        // ---------- 语言切换核心函数 ----------
         function updateLanguage(lang) {
             const dict = i18n[lang] || i18n.en;
+            // 更新标题
             document.getElementById('siteTitle').textContent = dict.siteTitle;
+            // 更新所有带 data-i18n 的元素
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[key] !== undefined) {
+                    // 对于统计区域，保留数字
                     if (el.closest('#statsDisplay')) {
                         const numberSpan = el.querySelector('span');
                         if (numberSpan) {
@@ -538,12 +552,17 @@
                     }
                 }
             });
+            // 更新占位符
             document.getElementById('inputText').placeholder = dict.placeholder;
             document.getElementById('resetBtn').textContent = dict.resetBtn;
+            // 更新语言切换按钮本身
             document.getElementById('langToggle').textContent = lang === 'en' ? '🌐 中文' : '🌐 English';
+            // 更新复制按钮
             copyBtn.textContent = dict.copyBtn;
+            // 更新主题按钮
             const dark = document.documentElement.getAttribute('data-theme') === 'dark';
             themeToggle.textContent = dark ? dict.themeLight : dict.themeDark;
+            // 更新保留字符输入框占位符
             document.getElementById('keepCharsInput').placeholder = lang === 'en' ? 'e.g. # @ ￥ / +' : '例如 # @ ￥ / +';
         }
 
@@ -628,51 +647,46 @@
                 }
             }
 
-            // 5. 删除空行（先不做，等段首缩进和行距处理完再统一处理）
-            // 将删除空行移到缩进和行距之后
-
-            // 6. 段首缩进两格
+            // 5. 段首缩进两格（在删除空行之前处理，保留空行）
             if (optIndent.checked) {
                 const lines = result.split('\n');
                 const indentedLines = lines.map(line => {
+                    // 空行不缩进
                     if (line.trim() === '') return line;
                     return '　　' + line;
                 });
                 result = indentedLines.join('\n');
             }
 
-            // 7. 行距处理
+            // 6. 行距处理
             let lineHeightValue = parseFloat(lineHeightInput.value);
             if (isNaN(lineHeightValue) || lineHeightValue < 12) {
                 lineHeightValue = 28;
                 lineHeightInput.value = 28;
             }
-            // 将磅值映射为段间空行数：每增加12磅约等于一个空行
+            // 将磅值映射为段间空行数
             const extraLineBreaks = Math.round((lineHeightValue - 12) / 12);
             const numBreaks = Math.min(Math.max(extraLineBreaks, 0), 4);
 
-            // 先按换行分割，过滤掉空行
+            // 分割成行，过滤空行（但保留缩进后的行）
             let lines = result.split('\n');
             let nonEmptyLines = lines.filter(line => line.trim() !== '');
 
             if (numBreaks > 0) {
-                // 在每段后添加指定数量的空行
                 let separatedText = nonEmptyLines.map(line => {
                     return line + '\n'.repeat(numBreaks);
                 }).join('');
-                // 去除末尾多余换行
                 result = separatedText.replace(/\n+$/, '');
             } else {
-                // 单倍行距：直接用单个换行符连接
                 result = nonEmptyLines.join('\n');
             }
 
-            // 8. 删除空行（如果用户勾选，在最终结果上再执行一次）
+            // 7. 删除空行（如果用户勾选，在最终结果上再执行一次）
             if (optRemoveEmptyLines.checked) {
                 result = result.split('\n').filter(line => line.trim() !== '').join('\n');
             }
 
-            // 9. 大小写转换
+            // 8. 大小写转换
             if (optUpperCase.checked) {
                 result = result.toUpperCase();
             } else if (optLowerCase.checked) {
@@ -722,6 +736,7 @@
         const allCheckboxes = document.querySelectorAll('.option-item input[type="checkbox"]');
         allCheckboxes.forEach(cb => {
             cb.addEventListener('change', () => {
+                // 大小写互斥
                 if (cb.id === 'optUpperCase' && cb.checked) {
                     optLowerCase.checked = false;
                     optCapitalize.checked = false;
@@ -732,6 +747,7 @@
                     optUpperCase.checked = false;
                     optLowerCase.checked = false;
                 }
+                // 空格处理互斥
                 if (cb.id === 'optRemoveAllSpaces' && cb.checked) {
                     optMultipleSpaces.checked = false;
                 } else if (cb.id === 'optMultipleSpaces' && cb.checked) {
@@ -783,24 +799,3 @@
         // ---------- 重置 ----------
         resetBtn.addEventListener('click', () => {
             inputEl.value = '';
-            optTrim.checked = true;
-            optMultipleSpaces.checked = true;
-            optRemoveAllSpaces.checked = false;
-            optRemoveEmptyLines.checked = true;
-            optUnifyLineBreaks.checked = true;
-            optRemoveSpecial.checked = false;
-            optUpperCase.checked = false;
-            optLowerCase.checked = false;
-            optCapitalize.checked = false;
-            optKeepTranscriptFormat.checked = false;
-            optIndent.checked = false;
-            lineHeightInput.value = '28';
-            keepCharsInput.value = '';
-            updateDisplay();
-        });
-
-        // ---------- 暗色主题 ----------
-        let darkMode = false;
-        themeToggle.addEventListener('click', () => {
-            darkMode = !darkMode;
-            document.documentElement.setAttribute('data-the
