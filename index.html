@@ -219,7 +219,6 @@
             stroke: currentColor;
             stroke-width: 2;
         }
-        /* ====== 广告位默认隐藏 ====== */
         .ad-container {
             display: none !important;
         }
@@ -269,23 +268,23 @@
         <!-- ========================================= -->
         <label class="option-item">
             <input type="checkbox" id="optTrim" checked />
-            <span data-i18n="optTrim">Trim leading/trailing spaces</span>
+            <span data-i18n="optTrim">去除首尾空格</span>
         </label>
         <label class="option-item">
             <input type="checkbox" id="optMultipleSpaces" checked />
-            <span data-i18n="optMultipleSpaces">Collapse multiple spaces</span>
+            <span data-i18n="optMultipleSpaces">合并多个空格</span>
         </label>
         <label class="option-item">
             <input type="checkbox" id="optRemoveEmptyLines" checked />
-            <span data-i18n="optRemoveEmptyLines">Delete empty lines</span>
+            <span data-i18n="optRemoveEmptyLines">删除空行</span>
         </label>
         <label class="option-item">
             <input type="checkbox" id="optUnifyLineBreaks" checked />
-            <span data-i18n="optUnifyLineBreaks">Unify line breaks (LF)</span>
+            <span data-i18n="optUnifyLineBreaks">统一换行符 (LF)</span>
         </label>
         <label class="option-item">
             <input type="checkbox" id="optRemoveAllSpaces" />
-            <span data-i18n="optRemoveAllSpaces">Remove all spaces (Chinese/English)</span>
+            <span data-i18n="optRemoveAllSpaces">移除所有空格（中文/英文）</span>
         </label>
 
         <!-- ========================================= -->
@@ -294,12 +293,12 @@
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
             <label class="option-item">
                 <input type="checkbox" id="optRemoveSpecial" />
-                <span data-i18n="optRemoveSpecial">Remove special symbols (keep letters/numbers/Chinese)</span>
+                <span data-i18n="optRemoveSpecial">移除特殊符号（保留字母/数字/中文）</span>
             </label>
             <div class="keep-chars-wrapper">
-                <span data-i18n="keepLabel">Keep extra chars:</span>
-                <input type="text" id="keepCharsInput" placeholder='e.g. # @ ￥ / +' />
-                <span class="hint-text" data-i18n="keepHint">(common punctuation kept by default)</span>
+                <span data-i18n="keepLabel">保留额外字符：</span>
+                <input type="text" id="keepCharsInput" placeholder='例如 # @ ￥ / +' />
+                <span class="hint-text" data-i18n="keepHint">（常用标点已默认保留）</span>
             </div>
         </div>
 
@@ -307,20 +306,20 @@
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; margin-top:4px;">
             <label class="option-item" style="margin-right:8px;">
                 <input type="checkbox" id="optKeepTranscriptFormat" />
-                <span data-i18n="optKeepTranscriptFormat">🔊 Keep transcript format</span>
+                <span data-i18n="optKeepTranscriptFormat">🔊 保留音频转文字稿格式</span>
             </label>
-            <span style="font-size:13px; color:var(--muted);" data-i18n="caseLabel">Case:</span>
+            <span style="font-size:13px; color:var(--muted);" data-i18n="caseLabel">大小写：</span>
             <label class="option-item">
                 <input type="checkbox" id="optUpperCase" />
-                <span data-i18n="optUpperCase">UPPER</span>
+                <span data-i18n="optUpperCase">转大写</span>
             </label>
             <label class="option-item">
                 <input type="checkbox" id="optLowerCase" />
-                <span data-i18n="optLowerCase">lower</span>
+                <span data-i18n="optLowerCase">转小写</span>
             </label>
             <label class="option-item">
                 <input type="checkbox" id="optCapitalize" />
-                <span data-i18n="optCapitalize">Capitalize</span>
+                <span data-i18n="optCapitalize">首字母大写</span>
             </label>
         </div>
 
@@ -328,48 +327,53 @@
         <!-- 区域三：中文排版（特定场景）              -->
         <!-- ========================================= -->
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
-            <span style="font-weight:500; font-size:14px; color:var(--muted);" data-i18n="cnLabel">🇨🇳 Chinese Layout</span>
+            <span style="font-weight:500; font-size:14px; color:var(--muted);" data-i18n="cnLabel">🇨🇳 中文排版</span>
             <label class="option-item">
                 <input type="checkbox" id="optIndent" />
-                <span data-i18n="optIndent">Indent first line (2 spaces)</span>
+                <span data-i18n="optIndent">段首缩进两格</span>
             </label>
             <div style="display:flex; align-items:center; gap:4px; font-size:14px;">
-                <span data-i18n="optLineHeight">Line height:</span>
+                <span data-i18n="optLineHeight">行距：</span>
                 <input type="number" id="lineHeightInput" value="28" min="12" max="60" step="1" style="width:70px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:4px 8px; font-size:14px; outline:none;" />
-                <span style="color:var(--muted);" data-i18n="unitLabel">pt</span>
+                <span style="color:var(--muted);" data-i18n="unitLabel">磅</span>
+                <!-- ====== 新增：人民币大写金额转换 ====== -->
+                <label class="option-item" style="margin-left:12px;">
+                    <input type="checkbox" id="optMoneyUppercase" />
+                    <span data-i18n="optMoneyUppercase">大写金额</span>
+                </label>
             </div>
         </div>
     </div>
 
-    <div class="hint-spaces" data-i18n="hintSpaces">💡 "Collapse" keeps single spaces; "Remove all" deletes every space.</div>
+    <div class="hint-spaces" data-i18n="hintSpaces">💡 “合并多个空格”只将多个空格缩成一个，不删除单个空格；“移除所有空格”会删除全部空格。</div>
 
     <!-- ====== 文本输入区 ====== -->
-    <div class="textarea-wrapper"><textarea id="inputText" placeholder="Paste or type your text here…"></textarea></div>
+    <div class="textarea-wrapper"><textarea id="inputText" placeholder="在此粘贴或输入需要清理的文本……"></textarea></div>
 
     <!-- ====== 统计 ====== -->
     <div class="stats" id="statsDisplay">
-        <span data-i18n="statsChars">Characters <span id="charCount">0</span></span>
-        <span data-i18n="statsWords">Words <span id="wordCount">0</span></span>
-        <span data-i18n="statsLines">Lines <span id="lineCount">0</span></span>
+        <span data-i18n="statsChars">字符数 <span id="charCount">0</span></span>
+        <span data-i18n="statsWords">单词数 <span id="wordCount">0</span></span>
+        <span data-i18n="statsLines">行数 <span id="lineCount">0</span></span>
     </div>
 
     <!-- ====== 操作按钮 ====== -->
     <div class="actions">
         <div class="left">
-            <button class="btn" id="copyBtn" data-i18n="copyBtn">📋 Copy Result</button>
-            <button class="btn" id="downloadBtn" data-i18n="downloadBtn">⬇ Download .txt</button>
+            <button class="btn" id="copyBtn" data-i18n="copyBtn">📋 复制结果</button>
+            <button class="btn" id="downloadBtn" data-i18n="downloadBtn">⬇ 下载 .txt</button>
         </div>
         <div class="privacy-badge">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-            <span data-i18n="privacy">All processing is done locally · No data uploaded</span>
+            <span data-i18n="privacy">所有处理在本地完成 · 不上传服务器</span>
         </div>
     </div>
 
     <!-- ====== 底部导航链接 ====== -->
     <div style="text-align:center; margin-top:30px; padding-top:20px; border-top:1px solid var(--border); font-size:14px; color:var(--muted);">
-        <a href="privacy.html" style="color:var(--accent); text-decoration:none;">Privacy Policy</a> · 
-        <a href="about.html" style="color:var(--accent); text-decoration:none;">About</a> · 
-        <a href="contact.html" style="color:var(--accent); text-decoration:none;">Contact</a>
+        <a href="privacy.html" style="color:var(--accent); text-decoration:none;">隐私政策</a> · 
+        <a href="about.html" style="color:var(--accent); text-decoration:none;">关于</a> · 
+        <a href="contact.html" style="color:var(--accent); text-decoration:none;">联系我们</a>
     </div>
 </div>
 
@@ -380,39 +384,40 @@
         const i18n = {
             en: {
                 siteTitle: '🧹 Text Cleaner',
-                optTrim: 'Trim leading/trailing spaces',
-                optMultipleSpaces: 'Collapse multiple spaces',
-                optRemoveAllSpaces: 'Remove all spaces (Chinese/English)',
-                optRemoveEmptyLines: 'Delete empty lines',
-                optUnifyLineBreaks: 'Unify line breaks (LF)',
-                optRemoveSpecial: 'Remove special symbols (keep letters/numbers/Chinese)',
-                optUpperCase: 'UPPER',
-                optLowerCase: 'lower',
-                optCapitalize: 'Capitalize',
-                optKeepTranscriptFormat: '🔊 Keep transcript format',
-                optIndent: 'Indent first line (2 spaces)',
-                optLineHeight: 'Line height:',
-                unitLabel: 'pt',
-                cnLabel: '🇨🇳 Chinese Layout',
-                caseLabel: 'Case:',
-                statsChars: 'Characters',
-                statsWords: 'Words',
-                statsLines: 'Lines',
-                copyBtn: '📋 Copy Result',
-                downloadBtn: '⬇ Download .txt',
-                privacy: 'All processing is done locally · No data uploaded',
-                copySuccess: '✅ Copied!',
-                copyDefault: '📋 Copy Result',
-                resetBtn: '↺ Reset',
-                themeDark: '🌙 Dark',
-                themeLight: '☀️ Light',
-                langToggle: '🌐 中文',
-                placeholder: 'Paste or type your text here…',
-                alertNoContent: 'No content to copy',
-                alertNoDownload: 'No content to download',
-                hintSpaces: '💡 "Collapse" keeps single spaces; "Remove all" deletes every space.',
-                keepLabel: 'Keep extra chars:',
-                keepHint: '(common punctuation kept by default)',
+                optTrim: '去除首尾空格',
+                optMultipleSpaces: '合并多个空格',
+                optRemoveAllSpaces: '移除所有空格（中文/英文）',
+                optRemoveEmptyLines: '删除空行',
+                optUnifyLineBreaks: '统一换行符 (LF)',
+                optRemoveSpecial: '移除特殊符号（保留字母/数字/中文）',
+                optUpperCase: '转大写',
+                optLowerCase: '转小写',
+                optCapitalize: '首字母大写',
+                optKeepTranscriptFormat: '🔊 保留音频转文字稿格式',
+                optIndent: '段首缩进两格',
+                optLineHeight: '行距：',
+                unitLabel: '磅',
+                cnLabel: '🇨🇳 中文排版',
+                caseLabel: '大小写：',
+                statsChars: '字符数',
+                statsWords: '单词数',
+                statsLines: '行数',
+                copyBtn: '📋 复制结果',
+                downloadBtn: '⬇ 下载 .txt',
+                privacy: '所有处理在本地完成 · 不上传服务器',
+                copySuccess: '✅ 已复制',
+                copyDefault: '📋 复制结果',
+                resetBtn: '↺ 重置',
+                themeDark: '🌙 暗色',
+                themeLight: '☀️ 亮色',
+                langToggle: '🌐 English',
+                placeholder: '在此粘贴或输入需要清理的文本……',
+                alertNoContent: '没有内容可复制',
+                alertNoDownload: '没有内容可下载',
+                hintSpaces: '💡 “合并多个空格”只将多个空格缩成一个，不删除单个空格；“移除所有空格”会删除全部空格。',
+                keepLabel: '保留额外字符：',
+                keepHint: '（常用标点已默认保留）',
+                optMoneyUppercase: '大写金额',
             },
             zh: {
                 siteTitle: '🧹 文本清理工具',
@@ -449,13 +454,14 @@
                 hintSpaces: '💡 “合并多个空格”只将多个空格缩成一个，不删除单个空格；“移除所有空格”会删除全部空格。',
                 keepLabel: '保留额外字符：',
                 keepHint: '（常用标点已默认保留）',
+                optMoneyUppercase: '大写金额',
             }
         };
 
-        let currentLang = 'en';
+        let currentLang = 'zh';
 
         function updateLanguage(lang) {
-            const dict = i18n[lang] || i18n.en;
+            const dict = i18n[lang] || i18n.zh;
             document.getElementById('siteTitle').textContent = dict.siteTitle;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
@@ -471,11 +477,11 @@
             });
             document.getElementById('inputText').placeholder = dict.placeholder;
             document.getElementById('resetBtn').textContent = dict.resetBtn;
-            document.getElementById('langToggle').textContent = lang === 'en' ? '🌐 中文' : '🌐 English';
+            document.getElementById('langToggle').textContent = lang === 'zh' ? '🌐 English' : '🌐 中文';
             copyBtn.textContent = dict.copyBtn;
             const dark = document.documentElement.getAttribute('data-theme') === 'dark';
             themeToggle.textContent = dark ? dict.themeLight : dict.themeDark;
-            document.getElementById('keepCharsInput').placeholder = lang === 'en' ? 'e.g. # @ ￥ / +' : '例如 # @ ￥ / +';
+            document.getElementById('keepCharsInput').placeholder = lang === 'zh' ? '例如 # @ ￥ / +' : 'e.g. # @ ￥ / +';
         }
 
         // ---------- DOM 引用 ----------
@@ -495,6 +501,7 @@
         const optCapitalize = document.getElementById('optCapitalize');
         const optKeepTranscriptFormat = document.getElementById('optKeepTranscriptFormat');
         const optIndent = document.getElementById('optIndent');
+        const optMoneyUppercase = document.getElementById('optMoneyUppercase');
         const lineHeightInput = document.getElementById('lineHeightInput');
         const keepCharsInput = document.getElementById('keepCharsInput');
 
@@ -504,9 +511,64 @@
         const themeToggle = document.getElementById('themeToggle');
         const langToggle = document.getElementById('langToggle');
 
-        // ---------- 工具：正则转义 ----------
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // ---------- 工具函数：数字转中文大写金额 ----------
+        function numberToChinese(num) {
+            if (isNaN(num) || num === null || num === undefined) return '';
+            const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+            const units = ['', '拾', '佰', '仟', '万', '拾', '佰', '仟', '亿', '拾', '佰', '仟'];
+            const decimalUnits = ['角', '分'];
+
+            let numStr = num.toString();
+            let parts = numStr.split('.');
+            let integerPart = parts[0];
+            let decimalPart = parts.length > 1 ? parts[1].padEnd(2, '0') : '00';
+
+            if (integerPart === '0' && decimalPart === '00') return '零元整';
+
+            // 转换整数部分
+            let result = '';
+            let integerDigits = integerPart.split('').reverse();
+            let zeroFlag = false;
+
+            for (let i = 0; i < integerDigits.length; i++) {
+                let digit = parseInt(integerDigits[i]);
+                let unit = units[i] || '';
+                if (digit === 0) {
+                    zeroFlag = true;
+                    continue;
+                }
+                if (zeroFlag) {
+                    result = '零' + result;
+                    zeroFlag = false;
+                }
+                result = digits[digit] + unit + result;
+            }
+            result += '元';
+
+            // 转换小数部分
+            let jiao = parseInt(decimalPart[0]);
+            let fen = parseInt(decimalPart[1]);
+            if (jiao === 0 && fen === 0) {
+                result += '整';
+            } else {
+                if (jiao > 0) {
+                    result += digits[jiao] + '角';
+                }
+                if (fen > 0) {
+                    result += digits[fen] + '分';
+                }
+            }
+            return result;
+        }
+
+        // ---------- 文本中的金额转换 ----------
+        function convertMoneyInText(text) {
+            // 匹配金额模式：数字（含小数），后面可跟"元"或"块"
+            const regex = /(\d+\.?\d*)\s*[元块]/g;
+            return text.replace(regex, (match, num) => {
+                const chinese = numberToChinese(parseFloat(num));
+                return chinese || match;
+            });
         }
 
         // ---------- 核心清理函数 ----------
@@ -606,6 +668,11 @@
                     if (result.length > 0) {
                         result = result.charAt(0).toUpperCase() + result.slice(1);
                     }
+                }
+
+                // 9. 人民币大写金额转换（放在最后，对其他转换结果进行处理）
+                if (optMoneyUppercase.checked) {
+                    result = convertMoneyInText(result);
                 }
             } catch (e) {
                 console.error('Clean error:', e);
@@ -722,6 +789,7 @@
             optCapitalize.checked = false;
             optKeepTranscriptFormat.checked = false;
             optIndent.checked = false;
+            optMoneyUppercase.checked = false;
             lineHeightInput.value = '28';
             keepCharsInput.value = '';
             updateDisplay();
@@ -738,7 +806,7 @@
 
         // ---------- 多语言切换 ----------
         langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
             updateLanguage(currentLang);
             const dict = i18n[currentLang];
             themeToggle.textContent = darkMode ? dict.themeLight : dict.themeDark;
@@ -746,8 +814,8 @@
         });
 
         // ---------- 初始化 ----------
-        updateLanguage('en');
-        themeToggle.textContent = '🌙 Dark';
+        updateLanguage('zh');
+        themeToggle.textContent = '🌙 暗色';
         updateDisplay();
         window.addEventListener('load', function() {
             updateDisplay();
