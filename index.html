@@ -9,55 +9,247 @@
     <meta name="keywords" content="文本清理, 去除空格, 删除空行, 文本格式化, 在线工具, text cleaner, remove spaces, delete empty lines, online tool, text formatter" />
     <link rel="canonical" href="https://ssdatastream.com" />
     <style>
-        /* ----- 全局重置 & 暗色变量 (保持不变) ----- */
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        /* ----- 全局重置 & 暗色变量 ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
         :root {
-            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0;
-            --muted: #64748b; --accent: #3b82f6; --shadow: 0 4px 24px rgba(0,0,0,0.06); --radius: 16px;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --muted: #64748b;
+            --accent: #3b82f6;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --radius: 16px;
         }
         [data-theme="dark"] {
-            --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --border: #334155;
-            --muted: #94a3b8; --accent: #60a5fa; --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --border: #334155;
+            --muted: #94a3b8;
+            --accent: #60a5fa;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
         }
-        body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: flex-start; }
-        .container { max-width: 1000px; width: 100%; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 30px 40px; border: 1px solid var(--border); }
-        header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
-        h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--accent), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .btn { background: var(--border); border: none; padding: 8px 16px; border-radius: 40px; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--border); }
-        .btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .btn-primary:hover { opacity: 0.85; }
-        .options-grid { display: flex; flex-wrap: wrap; gap: 14px 24px; padding: 16px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .option-item { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; user-select: none; }
-        .option-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
-        .keep-chars-wrapper { display: flex; align-items: center; gap: 8px; font-size: 14px; flex-wrap: wrap; margin-left: 0; }
-        .keep-chars-wrapper input { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 4px 12px; font-size: 14px; font-family: 'Menlo', monospace; width: 180px; height: 34px; outline: none; transition: border 0.2s; }
-        .keep-chars-wrapper input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,130,246,0.15); }
-        .keep-chars-wrapper .hint-text { font-size: 12px; color: var(--muted); }
-        .textarea-wrapper { position: relative; }
-        textarea { width: 100%; min-height: 320px; padding: 18px 20px; font-size: 15px; line-height: 1.7; font-family: 'Menlo', 'Cascadia Code', monospace; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 12px; resize: vertical; outline: none; transition: border 0.2s; }
-        textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-        .stats { display: flex; flex-wrap: wrap; gap: 16px 32px; margin-top: 16px; font-size: 14px; color: var(--muted); padding: 10px 0 6px; border-top: 1px solid var(--border); }
-        .stats span { font-weight: 500; color: var(--text); }
-        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; justify-content: space-between; align-items: center; }
-        .actions .left { display: flex; gap: 10px; flex-wrap: wrap; }
-        .privacy-badge { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-        .privacy-badge svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 30px 40px;
+            border: 1px solid var(--border);
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: var(--border);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+        .btn:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 24px;
+            padding: 16px 0 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .option-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+        .keep-chars-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            flex-wrap: wrap;
+            margin-left: 0;
+        }
+        .keep-chars-wrapper input {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 14px;
+            font-family: 'Menlo', monospace;
+            width: 180px;
+            height: 34px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .keep-chars-wrapper input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+        }
+        .keep-chars-wrapper .hint-text {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .textarea-wrapper {
+            position: relative;
+        }
+        textarea {
+            width: 100%;
+            min-height: 320px;
+            padding: 18px 20px;
+            font-size: 15px;
+            line-height: 1.7;
+            font-family: 'Menlo', 'Cascadia Code', monospace;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            resize: vertical;
+            outline: none;
+            transition: border 0.2s;
+        }
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 32px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--muted);
+            padding: 10px 0 6px;
+            border-top: 1px solid var(--border);
+        }
+        .stats span {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .actions .left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .privacy-badge {
+            font-size: 13px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .privacy-badge svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
         /* ====== 广告位默认隐藏 ====== */
-        .ad-container { display: none !important; }
-        .ad-container-sidebar { display: none !important; }
-        .ad-desktop-only { display: none !important; }
-        @media (max-width: 640px) {
-            .container { padding: 16px; } h1 { font-size: 20px; } textarea { min-height: 220px; }
-            .options-grid { gap: 10px; } .actions { flex-direction: column; align-items: stretch; }
-            .actions .left { justify-content: center; } .keep-chars-wrapper input { width: 120px; }
+        .ad-container {
+            display: none !important;
         }
-        .hint-spaces { font-size: 12px; color: var(--muted); margin-left: 26px; margin-top: -8px; margin-bottom: 8px; }
+        .ad-container-sidebar {
+            display: none !important;
+        }
+        .ad-desktop-only {
+            display: none !important;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 16px; }
+            h1 { font-size: 20px; }
+            textarea { min-height: 220px; }
+            .options-grid { gap: 10px; }
+            .actions { flex-direction: column; align-items: stretch; }
+            .actions .left { justify-content: center; }
+            .keep-chars-wrapper input { width: 120px; }
+        }
+        .hint-spaces {
+            font-size: 12px;
+            color: var(--muted);
+            margin-left: 26px;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- ====== 头部 ====== -->
     <header>
         <h1 id="siteTitle">🧹 Text Cleaner</h1>
         <div class="toolbar">
@@ -72,39 +264,79 @@
 
     <!-- ====== 功能选项 ====== -->
     <div class="options-grid" id="optionsContainer">
-        <!-- 区域一：核心清理 -->
-        <label class="option-item"><input type="checkbox" id="optTrim" checked /><span data-i18n="optTrim">Trim leading/trailing spaces</span></label>
-        <label class="option-item"><input type="checkbox" id="optMultipleSpaces" checked /><span data-i18n="optMultipleSpaces">Collapse multiple spaces</span></label>
-        <label class="option-item"><input type="checkbox" id="optRemoveEmptyLines" checked /><span data-i18n="optRemoveEmptyLines">Delete empty lines</span></label>
-        <label class="option-item"><input type="checkbox" id="optUnifyLineBreaks" checked /><span data-i18n="optUnifyLineBreaks">Unify line breaks (LF)</span></label>
-        <label class="option-item"><input type="checkbox" id="optRemoveAllSpaces" /><span data-i18n="optRemoveAllSpaces">Remove all spaces (Chinese/English)</span></label>
+        <!-- ========================================= -->
+        <!-- 区域一：核心清理（高频必用）              -->
+        <!-- ========================================= -->
+        <label class="option-item">
+            <input type="checkbox" id="optTrim" checked />
+            <span data-i18n="optTrim">Trim leading/trailing spaces</span>
+        </label>
+        <label class="option-item">
+            <input type="checkbox" id="optMultipleSpaces" checked />
+            <span data-i18n="optMultipleSpaces">Collapse multiple spaces</span>
+        </label>
+        <label class="option-item">
+            <input type="checkbox" id="optRemoveEmptyLines" checked />
+            <span data-i18n="optRemoveEmptyLines">Delete empty lines</span>
+        </label>
+        <label class="option-item">
+            <input type="checkbox" id="optUnifyLineBreaks" checked />
+            <span data-i18n="optUnifyLineBreaks">Unify line breaks (LF)</span>
+        </label>
+        <label class="option-item">
+            <input type="checkbox" id="optRemoveAllSpaces" />
+            <span data-i18n="optRemoveAllSpaces">Remove all spaces (Chinese/English)</span>
+        </label>
 
-        <!-- 区域二：高级清理 -->
+        <!-- ========================================= -->
+        <!-- 区域二：高级清理（按需使用）              -->
+        <!-- ========================================= -->
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
-            <label class="option-item"><input type="checkbox" id="optRemoveSpecial" /><span data-i18n="optRemoveSpecial">Remove special symbols (keep letters/numbers/Chinese)</span></label>
+            <label class="option-item">
+                <input type="checkbox" id="optRemoveSpecial" />
+                <span data-i18n="optRemoveSpecial">Remove special symbols (keep letters/numbers/Chinese)</span>
+            </label>
             <div class="keep-chars-wrapper">
                 <span data-i18n="keepLabel">Keep extra chars:</span>
                 <input type="text" id="keepCharsInput" placeholder='e.g. # @ ￥ / +' />
                 <span class="hint-text" data-i18n="keepHint">(common punctuation kept by default)</span>
             </div>
         </div>
-        <label class="option-item" style="flex-basis:100%;"><input type="checkbox" id="optKeepTranscriptFormat" /><span data-i18n="optKeepTranscriptFormat">🔊 Keep audio transcript format (speaker + timestamp)</span></label>
 
+        <!-- ====== 合并行：保留音频转文字稿格式 + 大小写 ====== -->
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; margin-top:4px;">
-            <span style="font-size:13px; color:var(--muted);" data-i18n="caseLabel">大小写：</span>
-            <label class="option-item"><input type="checkbox" id="optUpperCase" /><span data-i18n="optUpperCase">UPPER CASE</span></label>
-            <label class="option-item"><input type="checkbox" id="optLowerCase" /><span data-i18n="optLowerCase">lower case</span></label>
-            <label class="option-item"><input type="checkbox" id="optCapitalize" /><span data-i18n="optCapitalize">Capitalize sentences</span></label>
+            <label class="option-item" style="margin-right:8px;">
+                <input type="checkbox" id="optKeepTranscriptFormat" />
+                <span data-i18n="optKeepTranscriptFormat">🔊 Keep transcript format</span>
+            </label>
+            <span style="font-size:13px; color:var(--muted);" data-i18n="caseLabel">Case:</span>
+            <label class="option-item">
+                <input type="checkbox" id="optUpperCase" />
+                <span data-i18n="optUpperCase">UPPER</span>
+            </label>
+            <label class="option-item">
+                <input type="checkbox" id="optLowerCase" />
+                <span data-i18n="optLowerCase">lower</span>
+            </label>
+            <label class="option-item">
+                <input type="checkbox" id="optCapitalize" />
+                <span data-i18n="optCapitalize">Capitalize</span>
+            </label>
         </div>
 
-        <!-- 区域三：中文排版 -->
+        <!-- ========================================= -->
+        <!-- 区域三：中文排版（特定场景）              -->
+        <!-- ========================================= -->
         <div style="flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
-            <span style="font-weight:500; font-size:14px; color:var(--muted);" data-i18n="cnLabel">🇨🇳 中文排版</span>
-            <label class="option-item"><input type="checkbox" id="optIndent" /><span data-i18n="optIndent">段首缩进两格</span></label>
+            <span style="font-weight:500; font-size:14px; color:var(--muted);" data-i18n="cnLabel">🇨🇳 Chinese Layout</span>
+            <label class="option-item">
+                <input type="checkbox" id="optIndent" />
+                <span data-i18n="optIndent">Indent first line (2 spaces)</span>
+            </label>
             <div style="display:flex; align-items:center; gap:4px; font-size:14px;">
-                <span data-i18n="optLineHeight">行距：</span>
+                <span data-i18n="optLineHeight">Line height:</span>
                 <input type="number" id="lineHeightInput" value="28" min="12" max="60" step="1" style="width:70px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:4px 8px; font-size:14px; outline:none;" />
-                <span style="color:var(--muted);" data-i18n="unitLabel">磅</span>
+                <span style="color:var(--muted);" data-i18n="unitLabel">pt</span>
             </div>
         </div>
     </div>
@@ -141,7 +373,7 @@
     </div>
 </div>
 
-<!-- ====== AdSense 脚本（暂时保留但不启用） ====== -->
+<!-- ====== 脚本 ====== -->
 <script>
     (function() {
         // ---------- 多语言字典 ----------
@@ -154,41 +386,69 @@
                 optRemoveEmptyLines: 'Delete empty lines',
                 optUnifyLineBreaks: 'Unify line breaks (LF)',
                 optRemoveSpecial: 'Remove special symbols (keep letters/numbers/Chinese)',
-                optUpperCase: 'UPPER CASE', optLowerCase: 'lower case', optCapitalize: 'Capitalize sentences',
-                optKeepTranscriptFormat: '🔊 Keep audio transcript format (speaker + timestamp)',
-                optIndent: 'Indent first line (2 spaces)', optLineHeight: 'Line height:', unitLabel: 'pt',
-                cnLabel: '🇨🇳 Chinese Layout', caseLabel: 'Case:',
-                statsChars: 'Characters', statsWords: 'Words', statsLines: 'Lines',
-                copyBtn: '📋 Copy Result', downloadBtn: '⬇ Download .txt',
+                optUpperCase: 'UPPER',
+                optLowerCase: 'lower',
+                optCapitalize: 'Capitalize',
+                optKeepTranscriptFormat: '🔊 Keep transcript format',
+                optIndent: 'Indent first line (2 spaces)',
+                optLineHeight: 'Line height:',
+                unitLabel: 'pt',
+                cnLabel: '🇨🇳 Chinese Layout',
+                caseLabel: 'Case:',
+                statsChars: 'Characters',
+                statsWords: 'Words',
+                statsLines: 'Lines',
+                copyBtn: '📋 Copy Result',
+                downloadBtn: '⬇ Download .txt',
                 privacy: 'All processing is done locally · No data uploaded',
-                copySuccess: '✅ Copied!', copyDefault: '📋 Copy Result',
-                resetBtn: '↺ Reset', themeDark: '🌙 Dark', themeLight: '☀️ Light',
+                copySuccess: '✅ Copied!',
+                copyDefault: '📋 Copy Result',
+                resetBtn: '↺ Reset',
+                themeDark: '🌙 Dark',
+                themeLight: '☀️ Light',
                 langToggle: '🌐 中文',
                 placeholder: 'Paste or type your text here…',
-                alertNoContent: 'No content to copy', alertNoDownload: 'No content to download',
+                alertNoContent: 'No content to copy',
+                alertNoDownload: 'No content to download',
                 hintSpaces: '💡 "Collapse" keeps single spaces; "Remove all" deletes every space.',
-                keepLabel: 'Keep extra chars:', keepHint: '(common punctuation kept by default)',
+                keepLabel: 'Keep extra chars:',
+                keepHint: '(common punctuation kept by default)',
             },
             zh: {
                 siteTitle: '🧹 文本清理工具',
-                optTrim: '去除首尾空格', optMultipleSpaces: '合并多个空格',
-                optRemoveAllSpaces: '移除所有空格（中文/英文）', optRemoveEmptyLines: '删除空行',
+                optTrim: '去除首尾空格',
+                optMultipleSpaces: '合并多个空格',
+                optRemoveAllSpaces: '移除所有空格（中文/英文）',
+                optRemoveEmptyLines: '删除空行',
                 optUnifyLineBreaks: '统一换行符 (LF)',
                 optRemoveSpecial: '移除特殊符号（保留字母/数字/中文）',
-                optUpperCase: '转大写', optLowerCase: '转小写', optCapitalize: '首字母大写（每句）',
-                optKeepTranscriptFormat: '🔊 保留音频转文字稿格式（讲话人 + 时间码）',
-                optIndent: '段首缩进两格', optLineHeight: '行距：', unitLabel: '磅',
-                cnLabel: '🇨🇳 中文排版', caseLabel: '大小写：',
-                statsChars: '字符数', statsWords: '单词数', statsLines: '行数',
-                copyBtn: '📋 复制结果', downloadBtn: '⬇ 下载 .txt',
+                optUpperCase: '转大写',
+                optLowerCase: '转小写',
+                optCapitalize: '首字母大写',
+                optKeepTranscriptFormat: '🔊 保留音频转文字稿格式',
+                optIndent: '段首缩进两格',
+                optLineHeight: '行距：',
+                unitLabel: '磅',
+                cnLabel: '🇨🇳 中文排版',
+                caseLabel: '大小写：',
+                statsChars: '字符数',
+                statsWords: '单词数',
+                statsLines: '行数',
+                copyBtn: '📋 复制结果',
+                downloadBtn: '⬇ 下载 .txt',
                 privacy: '所有处理在本地完成 · 不上传服务器',
-                copySuccess: '✅ 已复制', copyDefault: '📋 复制结果',
-                resetBtn: '↺ 重置', themeDark: '🌙 暗色', themeLight: '☀️ 亮色',
+                copySuccess: '✅ 已复制',
+                copyDefault: '📋 复制结果',
+                resetBtn: '↺ 重置',
+                themeDark: '🌙 暗色',
+                themeLight: '☀️ 亮色',
                 langToggle: '🌐 English',
                 placeholder: '在此粘贴或输入需要清理的文本……',
-                alertNoContent: '没有内容可复制', alertNoDownload: '没有内容可下载',
+                alertNoContent: '没有内容可复制',
+                alertNoDownload: '没有内容可下载',
                 hintSpaces: '💡 “合并多个空格”只将多个空格缩成一个，不删除单个空格；“移除所有空格”会删除全部空格。',
-                keepLabel: '保留额外字符：', keepHint: '（常用标点已默认保留）',
+                keepLabel: '保留额外字符：',
+                keepHint: '（常用标点已默认保留）',
             }
         };
 
